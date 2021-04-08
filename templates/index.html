@@ -1,41 +1,73 @@
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-{% for message in messages %}
-    <p> {{message}} </p>
-{% endfor %}
-{% endif %}
-{% endwith %}
+{% extends 'layout.html' %}
 
-<form action="/add_client" method="POST">
-    <input type="text" name="fullname" placeholder="nombre completo">
-    <input type="text" name="phone" placeholder="telefono">
-    <input type="text" name="email" placeholder="email">
-    <button type="submit">
-        Guardar
-    </button>
+{% block body %}
+
+<div class="row">
+    <div class="col-md-5">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
     
-</form>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <p> {{message}} </p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
-<table>
-    <thead>
-        <tr>
-            <td>Nombre Completo</td>
-            <td>Teléfono</td>
-            <td>Email</td>
-            <td>Operaciones</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for cliente in clientes%}
-            <tr>
-                <td>{{cliente.1}}</td>
-                <td>{{cliente.2}}</td>
-                <td>{{cliente.3}}</td>
-                <td>
-                    <a href="/edit/{{cliente.0}}">Editar</a>
-                    <a href="/delete/{{cliente.0}}">Eliminar</a>
-                </td>
-            </tr>
         {% endfor %}
-    </tbody>
-</table>
+        {% endif %}
+        {% endwith %}
+        <div class="card card-body">
+            <form action="/add_client" method="POST">
+                <div class="form-group">
+
+                    <input type="text" name="fullname" placeholder="nombre completo" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="phone" placeholder="telefono" class="form-control">
+                </div>
+                <div class="form-group">
+
+                    <input type="text" name="email" placeholder="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <table class="table table-striped bg-white table-sm table-bordered">
+            <thead>
+                <tr>
+                    <td>Nombre Completo</td>
+                    <td>Teléfono</td>
+                    <td>Email</td>
+                    <td>Operaciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes%}
+                    <tr>
+                        <td>{{cliente.1}}</td>
+                        <td>{{cliente.2}}</td>
+                        <td>{{cliente.3}}</td>
+                        <td>
+                            <a href="/edit/{{cliente.0}}" class="btn btn-secondary">Editar</a>
+                            <a href="/delete/{{cliente.0}}" class="btn btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
