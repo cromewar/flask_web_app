@@ -65,7 +65,7 @@ def update_client(id):
 @app.route('/delete/<string:id>')
 def delete_client(id):
    cur = mysql.connection.cursor()
-   cur.execute('delete from clientes where id = %s', id)
+   cur.execute('delete from clientes where id = {0}'.format(id))
    mysql.connection.commit()
    flash('Cliente removido de manera exitosa')
    return redirect(url_for('Index'))
