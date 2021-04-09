@@ -4,9 +4,9 @@ from flask_mysqldb import MySQL
 app = Flask(__name__)
 
 # info de la base de datos
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'user_flask'
-app.config['MYSQL_PASSWORD'] = '12345678'
+app.config['MYSQL_HOST'] = '127.0.0.1'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'flask_app'
 #Conectar con base de datos 
 mysql = MySQL(app)
@@ -65,7 +65,7 @@ def update_client(id):
 @app.route('/delete/<string:id>')
 def delete_client(id):
    cur = mysql.connection.cursor()
-   cur.execute('delete from clientes where id = %s', id)
+   cur.execute('delete from clientes where id = {0}'.format(id))
    mysql.connection.commit()
    flash('Cliente removido de manera exitosa')
    return redirect(url_for('Index'))
