@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 
-{% block body %}
+{% block content %}
 <div class="col-md-4 offset-md-4">
     <div class="card card-body">
-        <form action="/update/{{cliente.0}}" method="post">
+        <form action="/flaskapp/update/{{cliente.0}}" method="post">
             <div class="form-group">
 
                 <input type="text" name="fullname" placeholder="nombre completo" value="{{cliente.1}}" class="form-control">

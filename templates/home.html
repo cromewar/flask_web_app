@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+    
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <p> {{message}} </p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="card card-body">
+            <form action="/flaskapp/add_client" method="POST">
+                <div class="form-group">
+
+                    <input type="text" name="fullname" placeholder="nombre completo" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="phone" placeholder="telefono" class="form-control">
+                </div>
+                <div class="form-group">
+
+                    <input type="text" name="email" placeholder="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <table class="table table-striped bg-white table-sm table-bordered">
+            <thead>
+                <tr>
+                    <td>Nombre Completo</td>
+                    <td>Teléfono</td>
+                    <td>Email</td>
+                    <td>Operaciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes%}
+                    <tr>
+                        <td>{{cliente.1}}</td>
+                        <td>{{cliente.2}}</td>
+                        <td>{{cliente.3}}</td>
+                        <td>
+                            <a href="/flaskapp/edit/{{cliente.0}}" class="btn btn-secondary">Editar</a>
+                            <a href="/flaskapp/delete/{{cliente.0}}" class="btn btn-danger btn-delete">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}
