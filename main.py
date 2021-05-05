@@ -2,8 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
+from extension import mysql
+from blueprints.clientes import client
 
 app = Flask(__name__)
+app.register_blueprint(client, url_prefix="/client")
 
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'mysecretkey'
@@ -15,7 +18,7 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'flask_app'
 
 # Intialize MySQL
-mysql = MySQL(app)
+mysql.init_app(app)
 
 # Routes
 
@@ -42,7 +45,7 @@ def login():
             session['id'] = account['id']
             session['username'] = account['username']
             # Redirect to home page
-            return redirect(url_for('home'))
+            return redirect(url_for('client.home'))
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
@@ -102,18 +105,6 @@ def register():
 # and shows the crud for its completion.
 
 
-@app.route('/home')
-def home():
-    # Check if user is loggedin
-    if 'loggedin' in session:
-        cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM clientes')
-        data = cur.fetchall()
-        # User is loggedin show them the home page
-        return render_template('home.html', username=session['username'], clientes=data)
-    # User is not loggedin redirect to login page
-    return redirect(url_for('login'))
-
 # Profile
 
 
@@ -132,57 +123,6 @@ def profile():
     return redirect(url_for('login'))
 
 # Routes Related To Crud Functions
-
-
-@app.route('/add_client', methods=['POST'])
-def add_client():
-    if request.method == 'POST':
-        fullname = request.form['fullname']
-        phone = request.form['phone']
-        email = request.form['email']
-        cur = mysql.connection.cursor()
-        cur.execute(
-            'INSERT INTO clientes (fullname, phone, email) VALUES (%s, %s, %s)', (fullname, phone, email))
-        mysql.connection.commit()
-        flash('Cliente agregado de manera satisfactoria')
-        return redirect(url_for('home'))
-
-
-@app.route('/edit/<id>')
-def get_client(id):
-    cur = mysql.connection.cursor()
-    cur.execute('select * from clientes where id = %s' % id)
-    data = cur.fetchall()
-    return render_template('edit_client.html', cliente=data[0])
-
-
-@app.route('/update/<id>', methods=['POST'])
-def update_client(id):
-    if request.method == 'POST':
-        fullname = request.form['fullname']
-        phone = request.form['phone']
-        email = request.form['email']
-
-    cur = mysql.connection.cursor()
-    cur.execute("""
-                UPDATE clientes
-                set fullname = %s, 
-                phone = %s,
-                email = %s
-                where id = %s
-                """, (fullname, phone, email, id))
-    mysql.connection.commit()
-    flash('Edición de cliente exitosa')
-    return redirect(url_for('home'))
-
-
-@app.route('/delete/<string:id>')
-def delete_client(id):
-    cur = mysql.connection.cursor()
-    cur.execute('delete from clientes where id = {0}'.format(id))
-    mysql.connection.commit()
-    flash('Cliente removido de manera exitosa')
-    return redirect(url_for('home'))
 
 
 # Enable debug mode

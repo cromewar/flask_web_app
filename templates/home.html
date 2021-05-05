@@ -11,7 +11,8 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Clientes <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ url_for('client.home') }}">Clientes <span
+                            class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Terapeuta</a>
@@ -42,17 +43,21 @@
         {% endif %}
         {% endwith %}
         <div class="card card-body">
-            <form action="/flaskapp/add_client" method="POST">
+            <form action="/client/add_client" method="POST">
                 <div class="form-group">
-
-                    <input type="text" name="fullname" placeholder="nombre completo" class="form-control">
+                    <input type="text" name="username" placeholder="username" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="phone" placeholder="telefono" class="form-control">
+                    <input type="text" name="password" placeholder="password" class="form-control">
                 </div>
                 <div class="form-group">
-
+                    <input type="text" name="nombres" placeholder="nombres" class="form-control">
+                </div>
+                <div class="form-group">
                     <input type="text" name="email" placeholder="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="cedula" placeholder="cédula" class="form-control">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">
@@ -66,21 +71,24 @@
         <table class="table table-striped bg-white table-sm table-bordered">
             <thead>
                 <tr>
-                    <td>Nombre Completo</td>
-                    <td>Teléfono</td>
-                    <td>Email</td>
-                    <td>Operaciones</td>
+                    <td>username</td>
+                    <td>password</td>
+                    <td>nombres</td>
+                    <td>email</td>
+                    <td>cedula</td>
                 </tr>
             </thead>
             <tbody>
-                {% for cliente in clientes%}
+                {% for cl in cliente%}
                 <tr>
-                    <td>{{cliente.1}}</td>
-                    <td>{{cliente.2}}</td>
-                    <td>{{cliente.3}}</td>
+                    <td>{{cl.1}}</td>
+                    <td>{{cl.3}}</td>
+                    <td>{{cl.2}}</td>
+                    <td>{{cl.4}}</td>
+                    <td>{{cl.5}}</td>
                     <td>
-                        <a href="/flaskapp/edit/{{cliente.0}}" class="btn btn-secondary">Editar</a>
-                        <a href="/flaskapp/delete/{{cliente.0}}" class="btn btn-danger btn-delete">Eliminar</a>
+                        <a href="/client/edit/{{cl.0}}" class="btn btn-secondary">Editar</a>
+                        <a href="/client/delete/{{cl.0}}" class="btn btn-danger btn-delete">Eliminar</a>
                     </td>
                 </tr>
                 {% endfor %}
