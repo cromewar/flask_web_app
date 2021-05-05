@@ -17,8 +17,10 @@ app.config['MYSQL_DB'] = 'flask_app'
 # Intialize MySQL
 mysql = MySQL(app)
 
-#Routes
-@app.route('/flaskapp/', methods=['GET', 'POST'])
+# Routes
+
+
+@app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
     msg = ''
@@ -29,7 +31,8 @@ def login():
         password = request.form['password']
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
+        cursor.execute(
+            'SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists in accounts table in out database
@@ -46,17 +49,20 @@ def login():
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
 
-@app.route('/flaskapp/logout')
+
+@app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-   session.pop('loggedin', None)
-   session.pop('id', None)
-   session.pop('username', None)
-   # Redirect to login page
-   return redirect(url_for('login'))
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    # Redirect to login page
+    return redirect(url_for('login'))
 
-#User registration
-@app.route('/flaskapp/register', methods=['GET', 'POST'])
+# User registration
+
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     # Output message if something goes wrong...
     msg = ''
@@ -67,7 +73,8 @@ def register():
         password = request.form['password']
         email = request.form['email']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
+        cursor.execute(
+            'SELECT * FROM accounts WHERE username = %s', (username,))
         account = cursor.fetchone()
         # If account exists show error and validation checks
         if account:
@@ -80,7 +87,8 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s)', (username, password, email,))
+            cursor.execute(
+                'INSERT INTO accounts VALUES (NULL, %s, %s, %s)', (username, password, email,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
@@ -89,10 +97,12 @@ def register():
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
-#Home Page() route
+# Home Page() route
 # Returns the home page only if the user exist, also takes the "clientes" table
 # and shows the crud for its completion.
-@app.route('/flaskapp/home')
+
+
+@app.route('/home')
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -100,51 +110,59 @@ def home():
         cur.execute('SELECT * FROM clientes')
         data = cur.fetchall()
         # User is loggedin show them the home page
-        return render_template('home.html', username=session['username'], clientes= data)
+        return render_template('home.html', username=session['username'], clientes=data)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-#Profile
-@app.route('/flaskapp/profile')
+# Profile
+
+
+@app.route('/profile')
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
+        cursor.execute('SELECT * FROM accounts WHERE id = %s',
+                       (session['id'],))
         account = cursor.fetchone()
         # Show the profile page with account info
         return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-#Routes Related To Crud Functions
-@app.route('/flaskapp/add_client', methods=['POST'])
+# Routes Related To Crud Functions
+
+
+@app.route('/add_client', methods=['POST'])
 def add_client():
     if request.method == 'POST':
-       fullname = request.form['fullname']
-       phone = request.form['phone']
-       email = request.form['email']
-       cur =  mysql.connection.cursor()
-       cur.execute('INSERT INTO clientes (fullname, phone, email) VALUES (%s, %s, %s)', (fullname, phone, email))
-       mysql.connection.commit()
-       flash('Cliente agregado de manera satisfactoria')
-       return redirect(url_for('home'))
+        fullname = request.form['fullname']
+        phone = request.form['phone']
+        email = request.form['email']
+        cur = mysql.connection.cursor()
+        cur.execute(
+            'INSERT INTO clientes (fullname, phone, email) VALUES (%s, %s, %s)', (fullname, phone, email))
+        mysql.connection.commit()
+        flash('Cliente agregado de manera satisfactoria')
+        return redirect(url_for('home'))
 
-@app.route('/flaskapp/edit/<id>')
+
+@app.route('/edit/<id>')
 def get_client(id):
     cur = mysql.connection.cursor()
     cur.execute('select * from clientes where id = %s' % id)
     data = cur.fetchall()
-    return render_template('edit_client.html', cliente = data[0])
+    return render_template('edit_client.html', cliente=data[0])
 
-@app.route('/flaskapp/update/<id>', methods = ['POST'])
+
+@app.route('/update/<id>', methods=['POST'])
 def update_client(id):
     if request.method == 'POST':
         fullname = request.form['fullname']
         phone = request.form['phone']
         email = request.form['email']
-        
+
     cur = mysql.connection.cursor()
     cur.execute("""
                 UPDATE clientes
@@ -156,16 +174,17 @@ def update_client(id):
     mysql.connection.commit()
     flash('Edición de cliente exitosa')
     return redirect(url_for('home'))
-    
 
-@app.route('/flaskapp/delete/<string:id>')
+
+@app.route('/delete/<string:id>')
 def delete_client(id):
-   cur = mysql.connection.cursor()
-   cur.execute('delete from clientes where id = {0}'.format(id))
-   mysql.connection.commit()
-   flash('Cliente removido de manera exitosa')
-   return redirect(url_for('home'))
+    cur = mysql.connection.cursor()
+    cur.execute('delete from clientes where id = {0}'.format(id))
+    mysql.connection.commit()
+    flash('Cliente removido de manera exitosa')
+    return redirect(url_for('home'))
 
-#Enable debug mode
+
+# Enable debug mode
 if __name__ == '__main__':
-    app.run(port = 3000, debug=True)
+    app.run(port=3000, debug=True)
