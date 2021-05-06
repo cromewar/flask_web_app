@@ -16,7 +16,7 @@
                     <a class="nav-link" href="{{ url_for('terapeuta.home') }}">Terapeuta</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Especialidades</a>
+                    <a class="nav-link" href="{{ url_for('especialidad.home') }}">Especialidades</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Terapia</a>
@@ -41,7 +41,7 @@
         {% endif %}
         {% endwith %}
         <div class="card card-body">
-            <form action="/terapeuta/add_client" method="POST">
+            <form action="/terapeuta/add_therapist" method="POST">
                 <div class="form-group">
                     <input type="text" name="username" placeholder="username" class="form-control">
                 </div>
@@ -61,7 +61,7 @@
                     <input type="text" name="tarifa" placeholder="tarifa" class="form-control">
                 </div>
                 <div class="form-group">
-                    <select name="especialidades" class="form-control">
+                    <select name="especialidad" class="form-control">
                         {% for esp in especialidad%}
                         <option value="{{ esp.0}}">
                             {{ esp.1 }}

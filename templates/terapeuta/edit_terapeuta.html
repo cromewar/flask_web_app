@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="col-md-4 offset-md-4">
+    <div class="card card-body">
+        <form action="/terapeuta/update/{{terapeuta.0}}" method="post">
+            <div class="form-group">
+                <input type="text" name="username" placeholder="username" class="form-control" value="{{terapeuta.1}}">
+            </div>
+            <div class="form-group">
+                <input type="text" name="password" placeholder="password" class="form-control" value="{{terapeuta.2}}">
+            </div>
+            <div class="form-group">
+                <input type="text" name="email" placeholder="email" class="form-control" value="{{terapeuta.3}}">
+            </div>
+            <div class="form-group">
+                <input type="text" name="nombre" placeholder="nombre" class="form-control" value="{{terapeuta.4}}">
+            </div>
+            <div class="form-group">
+                <input type="text" name="apellido" placeholder="apellido" class="form-control" value="{{terapeuta.5}}">
+            </div>
+            <div class=" form-group">
+                <input type="text" name="tarifa" placeholder="tarifa" class="form-control" value="{{terapeuta.6}}">
+            </div>
+            <div class="form-group">
+                <select name="especialidad" class="form-control">
+                    {% for esp in especialidad%}
+                    <option value="{{esp.0}}">
+                        {{ esp.1 }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class=" form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
