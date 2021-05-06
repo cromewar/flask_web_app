@@ -1,20 +1,18 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Terapeuta{% endblock %}
 
 {% block content %}
-
-
 <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('client.home') }}">Clientes <span
                             class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="{{ url_for('terapeuta.home') }}">Terapeuta</a>
                 </li>
                 <li class="nav-item">
@@ -43,7 +41,7 @@
         {% endif %}
         {% endwith %}
         <div class="card card-body">
-            <form action="/client/add_client" method="POST">
+            <form action="/terapeuta/add_client" method="POST">
                 <div class="form-group">
                     <input type="text" name="username" placeholder="username" class="form-control">
                 </div>
@@ -51,14 +49,27 @@
                     <input type="text" name="password" placeholder="password" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="nombres" placeholder="nombres" class="form-control">
-                </div>
-                <div class="form-group">
                     <input type="text" name="email" placeholder="email" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="cedula" placeholder="cédula" class="form-control">
+                    <input type="text" name="nombre" placeholder="nombres" class="form-control">
                 </div>
+                <div class="form-group">
+                    <input type="text" name="apellido" placeholder="apellidos" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="tarifa" placeholder="tarifa" class="form-control">
+                </div>
+                <div class="form-group">
+                    <select name="especialidades" class="form-control">
+                        {% for esp in especialidad%}
+                        <option value="{{ esp.0}}">
+                            {{ esp.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">
                         Guardar
@@ -67,28 +78,35 @@
             </form>
         </div>
     </div>
+
+</div>
+<div class="row">
     <div class="col-md-7">
         <table class="table table-striped bg-white table-sm table-bordered">
             <thead>
                 <tr>
                     <td>username</td>
                     <td>password</td>
-                    <td>nombres</td>
                     <td>email</td>
-                    <td>cedula</td>
+                    <td>nombre</td>
+                    <td>epellido</td>
+                    <td>tarifa</td>
+                    <td>especialidad</td>
                 </tr>
             </thead>
             <tbody>
-                {% for cl in cliente%}
+                {% for ter in terapeuta%}
                 <tr>
-                    <td>{{cl.1}}</td>
-                    <td>{{cl.3}}</td>
-                    <td>{{cl.2}}</td>
-                    <td>{{cl.4}}</td>
-                    <td>{{cl.5}}</td>
+                    <td>{{ter.1}}</td>
+                    <td>{{ter.3}}</td>
+                    <td>{{ter.2}}</td>
+                    <td>{{ter.4}}</td>
+                    <td>{{ter.5}}</td>
+                    <td>{{ter.6}}</td>
+                    <td>{{ter.8}}</td>
                     <td>
-                        <a href="/client/edit/{{cl.0}}" class="btn btn-secondary">Editar</a>
-                        <a href="/client/delete/{{cl.0}}" class="btn btn-danger btn-delete">Eliminar</a>
+                        <a href="/terapeuta/edit/{{ter.0}}" class="btn btn-secondary">Editar</a>
+                        <a href="/terapeuta/delete/{{ter.0}}" class="btn btn-danger btn-delete">Eliminar</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -96,6 +114,4 @@
         </table>
     </div>
 </div>
-
-
 {% endblock %}

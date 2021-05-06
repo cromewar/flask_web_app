@@ -4,9 +4,11 @@ import MySQLdb.cursors
 import re
 from extension import mysql
 from blueprints.clientes import client
+from blueprints.terapeuta import terapeuta
 
 app = Flask(__name__)
 app.register_blueprint(client, url_prefix="/client")
+app.register_blueprint(terapeuta, url_prefix="/terapeuta")
 
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'mysecretkey'
