@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+
+{% block title %}Terapia{% endblock %}
+
+{% block content %}
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('client.home') }}">Clientes <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('terapeuta.home') }}">Terapeuta</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('especialidad.home') }}">Especialidades</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('terapia.home') }}">Terapia</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p> {{message}} </p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="card card-body">
+            <form action="/terapia/add_therapy" method="POST">
+                <div class="form-group">
+                    <input type="datetime-local" name="fecha" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="costo" placeholder="costo" class="form-control">
+                </div>
+                <div class="form-group">
+                    <select name="terapeuta" class="form-control">
+                        {% for ter in terapeuta%}
+                        <option value="{{ ter.0}}">
+                            {{ ter.4 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="cliente" class="form-control">
+                        {% for cl in cliente%}
+                        <option value="{{ cl.0}}">
+                            {{ cl.2 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <table class="table table-striped bg-white table-sm table-bordered">
+            <thead>
+                <tr>
+                    <td>fecha</td>
+                    <td>costo</td>
+                    <td>terapeuta</td>
+                    <td>cliente</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tera in terapia%}
+                <tr>
+                    <td>{{tera.1}}</td>
+                    <td>{{tera.2}}</td>
+                    <td>{{tera.5}}</td>
+                    <td>{{tera.6}}</td>
+                    <td>
+                        <a href="/terapia/edit/{{tera.0}}" class="btn btn-secondary">Editar</a>
+                        <a href="/terapia/delete/{{tera.0}}" class="btn btn-danger btn-delete">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}
