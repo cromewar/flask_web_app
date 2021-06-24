@@ -25,14 +25,16 @@ def home():
 @terapia.route('/add_therapy', methods=['POST'])
 def add_therapy():
     if request.method == 'POST':
-        fecha = request.form['fecha']
-        costo = request.form['costo']
-        terapeuta = request.form['terapeuta']
         cliente = request.form['cliente']
+        terapeuta = request.form['terapeuta']
+        fecha = request.form['fecha']
+        duracion = request.form['duracion']
+        fin = request.form['fin']
+        costo = request.form['costo']
 
         cur = mysql.connection.cursor()
         cur.execute(
-            'INSERT INTO terapia (fecha, costo, terapeuta_id_terapueta, cliente_id_cliente) VALUES (%s, %s, %s, %s)', (fecha, costo, terapeuta, cliente))
+            'INSERT INTO terapia (cliente_id_cliente, terapeuta_id_terapueta, fecha, duracion, fin, costo) VALUES (%s, %s, %s, %s, %s, %s)', (cliente, terapeuta, fecha, duracion, fin, costo))
         mysql.connection.commit()
         flash('Terapia agregada de manera satisfactoria')
         return redirect(url_for('terapia.home'))
