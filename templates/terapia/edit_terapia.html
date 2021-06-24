@@ -4,22 +4,9 @@
 <div class="col-md-4 offset-md-4">
     <div class="card card-body">
         <form action="/terapia/update/{{terapia.0}}" method="post">
+            
             <div class="form-group">
-                <input type="datetime-local" name="fecha" class="form-control" value="{{terapia.5}}">
-            </div>
-            <div class="form-group">
-                <input type="text" name="costo" placeholder="costo" class="form-control" value="{{terapia.2}}">
-            </div>
-            <div class="form-group">
-                <select name="terapeuta" class="form-control">
-                    {% for ter in terapeuta%}
-                    <option value="{{ ter.0}}">
-                        {{ ter.4 }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
+                <p>Cliente: </p>
                 <select name="cliente" class="form-control">
                     {% for cl in cliente%}
                     <option value="{{ cl.0}}">
@@ -28,6 +15,43 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-group">
+                <p>Terapeuta: </p>
+                <select name="terapeuta" class="form-control">
+                    {% for ter in terapeuta%}
+                    <option value="{{ ter.0}}">
+                        {{ ter.4 }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" value="{{terapia.3}}" id="date_text">
+                <input type="datetime-local" name="fecha" class="form-control" value="" id="dat">
+            </div>
+            <div class="form-group">
+                <p>Duración: </p>
+                <input type="hidden" value="{{terapia.4}}" id="duracion_from_back">
+                <select name="duracion" class="form-control" id="dur">
+                    {% for i in range(3) %}
+                    <option value="{{i+1}}">
+                        {{i+1}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="hidden" value="" name="fin" id="final_date">
+            </div>
+            <div class="form-group">
+                <p>Costo :</p>
+                <p id="resultado">{{ terapia.6 }}</p>
+                <input type="hidden" value="{{ terapia.6 }}" name="costo" id="cost">
+            </div>
+            
+            
+            
             <div class=" form-group">
                 <button type="submit" class="btn btn-primary btn-block">
                     Guardar
@@ -36,4 +60,6 @@
         </form>
     </div>
 </div>
+<script src="{{url_for('static', filename='moment.js')}}"></script>
+<script src="{{url_for('static', filename='edit_terapia.js')}}"></script>
 {% endblock %}

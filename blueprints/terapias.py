@@ -1,9 +1,12 @@
+from controller.terapy_check import check_conflict
 from flask import Blueprint, render_template
-from flask import render_template, request, redirect, url_for, session, flash
+from flask import render_template, request, redirect, url_for, session, flash, json
 from flask_mysqldb import MySQL
+import flask
 import MySQLdb.cursors
 import re
 from extension import mysql
+
 
 terapia = Blueprint('terapia', __name__, static_folder="../static",
                     template_folder="../templates/terapia")
@@ -15,6 +18,8 @@ def home():
     cur.execute(
         'SELECT terapia.*,terapeuta.nombre,cliente.nombres FROM terapia LEFT JOIN terapeuta ON terapeuta.id_terapueta = terapia.terapeuta_id_terapueta LEFT JOIN cliente ON cliente.id_cliente = terapia.cliente_id_cliente')
     data = cur.fetchall()
+
+
     cur.execute('SELECT * FROM cliente')
     cliente = cur.fetchall()
     cur.execute('SELECT * FROM terapeuta')
@@ -25,14 +30,25 @@ def home():
 @terapia.route('/add_therapy', methods=['POST'])
 def add_therapy():
     if request.method == 'POST':
-        cliente = request.form['cliente']
-        terapeuta = request.form['terapeuta']
-        fecha = request.form['fecha']
-        duracion = request.form['duracion']
-        fin = request.form['fin']
-        costo = request.form['costo']
+        json_data = flask.request.json
+        cliente = json_data["cliente"]
+        terapeuta = json_data["terapeuta"]
+        fecha = json_data["fecha"]
+        duracion = json_data["duracion"]
+        fin = json_data["fin"]
+        costo = json_data["costo"]
+
+        # cliente = request.form['cliente']
+        # terapeuta = request.form['terapeuta']
+        # fecha = request.form['fecha']
+        # duracion = request.form['duracion']
+        # fin = request.form['fin']
+        # costo = request.form['costo']
+        print(request)
+        print(cliente, terapeuta, fecha, duracion, fin, costo)
 
         cur = mysql.connection.cursor()
+        
         cur.execute(
             'INSERT INTO terapia (cliente_id_cliente, terapeuta_id_terapueta, fecha, duracion, fin, costo) VALUES (%s, %s, %s, %s, %s, %s)', (cliente, terapeuta, fecha, duracion, fin, costo))
         mysql.connection.commit()
@@ -55,20 +71,24 @@ def get_terapy(id):
 @terapia.route('/update/<id>', methods=['POST'])
 def update_client(id):
     if request.method == 'POST':
-        fecha = request.form['fecha']
-        costo = request.form['costo']
-        terapeuta = request.form['terapeuta']
         cliente = request.form['cliente']
+        terapeuta = request.form['terapeuta']
+        fecha = request.form['fecha']
+        duracion = request.form['duracion']
+        fin = request.form['fin']
+        costo = request.form['costo']
 
     cur = mysql.connection.cursor()
     cur.execute("""
                 UPDATE terapia
-                set fecha = %s, 
-                costo = %s,
+                set cliente_id_cliente = %s,
                 terapeuta_id_terapueta = %s,
-                cliente_id_cliente = %s
+                fecha = %s, 
+                duracion = %s,
+                fin = %s,
+                costo = %s
                 where id_terapia = %s
-                """, (fecha, costo, terapeuta, cliente, id))
+                """, (cliente,terapeuta,fecha,duracion,fin, costo, id))
     mysql.connection.commit()
     flash('Edición de terapia exitosa')
     return redirect(url_for('terapia.home'))

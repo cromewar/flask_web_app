@@ -41,7 +41,8 @@
         {% endif %}
         {% endwith %}
         <div class="card card-body">
-            <form action="/terapia/add_therapy" method="POST">
+            <!-- action="/terapia/add_therapy" method="POST" -->
+            <form id="formulario-terapia">
                 <div class="form-group">
                     <p>Cliente: </p>
                     <select name="cliente" class="form-control">
@@ -54,13 +55,14 @@
                 </div>
                 <div class="form-group">
                     <p>Terapeuta: </p>
-                    <select name="terapeuta" class="form-control" id="terap">
+                    <select name="terap" class="form-control" id="terap">
                         {% for ter in terapeuta%}
                         <option value="{{ ter.0 ~ '-' ~ ter.6}}">
                             {{ ter.4 }}
                         </option>
                         {% endfor %}
                     </select>
+                    <input type="hidden" name="terapeuta" id="terapist">
                 </div>
                 <div class="form-group">
                     <p>Fecha: </p>
@@ -88,7 +90,7 @@
                 
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">
+                    <button class="btn btn-primary btn-block" id="submit-terapia">
                         Guardar
                     </button>
                 </div>
@@ -127,31 +129,7 @@
         </table>
     </div>
 </div>
-<script type="text/javascript">
-    let duracion = document.getElementById('dur')
-    let terapeuta = document.getElementById('terap') 
-    let tarifa = terapeuta.value.split('-')
-    if (terapeuta){
-        terapeuta.addEventListener('click', function(){
-            //alert(terapeuta.value
-            document.getElementById('resultado').innerHTML = tarifa[1]
-        })
-    }
-    duracion.addEventListener('click', function(){
-        let costo = document.getElementById('resultado').innerHTML = tarifa[1] * duracion.value
-        document.getElementById('cost').value =  parseFloat(costo)
-        let fecha = document.getElementById('date')
-        let new_date = new Date(fecha.value)
-        new_date.setHours(new_date.getHours() + parseInt( duracion.value))
-        
-        let final_date = new_date.toISOString()
-        //let end = final_date.replaceAll("/", "-")
-        document.getElementById('final_date').value = moment(final_date).format("YYYY-MM-DDTkk:mm")
-    })
 
-    
-
-    
-</script>
+<script src="{{url_for('static', filename='terapia.js')}}"></script>
 
 {% endblock %}
