@@ -1,7 +1,7 @@
 from controller.terapy_check import check_conflict
 from datetime import datetime
 from flask import Blueprint, render_template
-from flask import render_template, request, redirect, url_for, session, flash, json
+from flask import render_template, request, redirect, url_for, session, flash, jsonify, json
 from flask_mysqldb import MySQL
 import flask
 import MySQLdb.cursors
@@ -37,6 +37,22 @@ def factura(id):
 
     return render_template('terapia_factura.html', terapia=data[0])
 
+@terapia.route('/livesearch', methods=["POST","GET"])
+def livesearch():
+    searchbox = request.form.get('text')
+    cur = mysql.connection.cursor()
+    query = "SELECT terapia.*,terapeuta.nombre,cliente.nombres, especialidad.descripcion FROM terapia LEFT JOIN terapeuta ON terapeuta.id_terapueta = terapia.terapeuta_id_terapueta LEFT JOIN cliente ON cliente.id_cliente = terapia.cliente_id_cliente LEFT JOIN especialidad ON especialidad.id_especialidad = terapeuta.id_especialidad WHERE especialidad.descripcion LIKE '{}%'  OR terapeuta.nombre LIKE '{}%' OR cliente.nombres LIKE '{}%' ".format(searchbox, searchbox, searchbox)
+    cur.execute(query)
+    row_headers =[x[0] for x in cur.description]
+    rv = cur.fetchall()
+    json_data=[]
+    for result in rv:
+        json_data.append(dict(zip(row_headers, result)))
+    return json.dumps(json_data)
+
+
+
+    
 
 
 @terapia.route('/add_therapy', methods=['POST'])

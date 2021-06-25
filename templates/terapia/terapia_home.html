@@ -112,8 +112,8 @@
             <tbody>
                 {% for tera in terapia%}
                 <tr>
-                    <td>{{tera.7}}</td>
                     <td>{{tera.8}}</td>
+                    <td>{{tera.7}}</td>
                     <td>{{tera.3}}</td>
                     <td>{{tera.4}}</td>
                     <td>{{tera.5}}</td>
@@ -128,6 +128,29 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <input type="text" id="livebox">
+        <p id="search-response"></p>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $("#livebox").on("input", function(e){
+                let textinlivebox = $("#livebox").val();
+                $.ajax({
+                    method: "POST",
+                    url: "/terapia/livesearch",
+                    data:{text: textinlivebox},
+                    success: function(res){
+                        //document.getElementById('search-response').innerHTML = res;
+                        console.log(res)
+                    }
+                })
+            });
+        });
+    </script>
 </div>
 
 <!-- <div class="row">
