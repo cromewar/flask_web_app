@@ -29,6 +29,16 @@ def home():
     return render_template('terapia_home.html', terapia=data, terapeuta=terapeuta, cliente=cliente)
 
 
+@terapia.route('/factura/<id>')
+def factura(id):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM terapia WHERE id_terapia  = %s' % id)
+    data = cur.fetchall()
+
+    return render_template('terapia_factura.html', terapia=data[0])
+
+
+
 @terapia.route('/add_therapy', methods=['POST'])
 def add_therapy():
     if request.method == 'POST':

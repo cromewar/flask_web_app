@@ -8,11 +8,13 @@ from blueprints.terapeuta import terapeuta
 from blueprints.especialidades import especialidad
 from blueprints.terapias import terapia
 
+
 app = Flask(__name__)
 app.register_blueprint(client, url_prefix="/client")
 app.register_blueprint(terapeuta, url_prefix="/terapeuta")
 app.register_blueprint(especialidad, url_prefix="/especialidad")
 app.register_blueprint(terapia, url_prefix="/terapia")
+
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'mysecretkey'
 

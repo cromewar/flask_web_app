@@ -87,8 +87,7 @@
                     <input type="hidden" value="" name="fin" id="final_date">
                 </div>
                 
-                
-
+            
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" id="submit-terapia" >
                         Guardar
@@ -122,6 +121,7 @@
                     <td>
                         <a href="/terapia/edit/{{tera.0}}" class="btn btn-secondary">Editar</a>
                         <a href="/terapia/delete/{{tera.0}}" class="btn btn-danger btn-delete">Eliminar</a>
+                        <a href="/terapia/factura/{{tera.0}}" class="btn btn-primary">Factura</a>
                     </td>
                 </tr>
                 {% endfor %}
