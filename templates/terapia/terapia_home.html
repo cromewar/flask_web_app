@@ -42,7 +42,7 @@
         {% endwith %}
         <div class="card card-body">
             <!-- action="/terapia/add_therapy" method="POST" -->
-            <form id="formulario-terapia">
+            <form id="formulario-terapia" action="/terapia/add_therapy" method="POST">
                 <div class="form-group">
                     <p>Cliente: </p>
                     <select name="cliente" class="form-control">
@@ -90,7 +90,7 @@
                 
 
                 <div class="form-group">
-                    <button class="btn btn-primary btn-block" id="submit-terapia">
+                    <button class="btn btn-primary btn-block" id="submit-terapia" >
                         Guardar
                     </button>
                 </div>
@@ -113,8 +113,8 @@
             <tbody>
                 {% for tera in terapia%}
                 <tr>
-                    <td>{{tera.1}}</td>
-                    <td>{{tera.2}}</td>
+                    <td>{{tera.7}}</td>
+                    <td>{{tera.8}}</td>
                     <td>{{tera.3}}</td>
                     <td>{{tera.4}}</td>
                     <td>{{tera.5}}</td>
@@ -130,6 +130,22 @@
     </div>
 </div>
 
+<!-- <div class="row">
+    <div id="calendar" class="col-md-12">
+        <script>
+            let calendarEl = document.getElementById('calendar');
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                
+                    
+            }); 
+            calendar.render();
+        </script>
+
+    </div>
+</div> -->
+
+
 <script src="{{url_for('static', filename='terapia.js')}}"></script>
+
 
 {% endblock %}

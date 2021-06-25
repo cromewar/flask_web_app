@@ -1,19 +1,15 @@
-import datetime
+from datetime import datetime
 
-def check_conflict(client, doctor, current_date, data):
-    print(f"cliente: {client}")
-    print(f"terapeuta: {doctor}")
+def check_conflict(data, fecha_ini, h1, cliente, terapeuta ):
     for element in data:
-        if element[1] == client or element[2] == doctor:
-            print("client or doctor found")
-            if element[3].year == current_date.year:
-                if element[3].month == current_date.month:
-                    if element[3].day == current_date.day:
-                        if current_date.hour >= element[3].hour and current_date.hour <= element[5].hour:
-                            print("True")
-                            return True
-        else:
-            print("False")
-            return False
-                
-
+        date = element[3].strftime('%Y-%m-%d')
+        if date == fecha_ini:
+            hour_one = element[3].hour
+            hour_two = element[5].hour
+            if element[1] == int(cliente) or element[2] == int(terapeuta):
+                if h1 >= 19 or h1 <= 7:
+                    return True
+                elif h1 >= hour_one and h1 <= hour_two:
+                    return True
+                else:
+                    return False

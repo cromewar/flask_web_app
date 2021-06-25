@@ -23,72 +23,72 @@ duracion.addEventListener('click', function () {
     document.getElementById('final_date').value = moment(final_date).format("YYYY-MM-DDTkk:mm")
 })
 
-let send_buttom = document.getElementById("submit-terapia")
-if (send_buttom) {
-    send_buttom.addEventListener('click', function () {
+// let send_buttom = document.getElementById("submit-terapia")
+// if (send_buttom) {
+//     send_buttom.addEventListener('click', function () {
 
-        // let x = compro( 'nueva fehca ' , 'arrays de las fecha ')
+//         // let x = compro( 'nueva fehca ' , 'arrays de las fecha ')
 
-        // if(x){
+//         // if(x){
             
-        // }
+//         // }
 
-        let formulario = document.forms['formulario-terapia']
-        //alert(formulario.costo.value)
-        var myHeaders = new Headers();
+//         let formulario = document.forms['formulario-terapia']
+//        //alert(formulario.costo.value)
+//         var myHeaders = new Headers();
 
-        myHeaders.append("Content-Type", "application/json");
-
-
-
-        var raw = JSON.stringify({
-
-            "cliente": formulario.cliente.value,
-
-            "terapeuta": formulario.terapeuta.value,
-
-            "fecha": formulario.fecha.value,
-
-            "duracion": formulario.duracion.value,
-
-            "fin": formulario.fin.value,
-
-            "costo": formulario.costo.value
-
-        });
+//         myHeaders.append("Content-Type", "application/json");
 
 
 
-        var requestOptions = {
+//         var raw = JSON.stringify({
 
-            method: 'POST',
+//             "cliente": formulario.cliente.value,
 
-            headers: myHeaders,
+//             "terapeuta": formulario.terapeuta.value,
 
-            body: raw,
+//             "fecha": formulario.fecha.value,
 
-            redirect: 'follow'
+//             "duracion": formulario.duracion.value,
 
-        };
+//             "fin": formulario.fin.value,
+
+//             "costo": formulario.costo.value
+
+//         });
 
 
 
-        fetch("http://127.0.0.1:3000/terapia/add_therapy", requestOptions)
+//         var requestOptions = {
 
-            .then(response => response.text())
+//             method: 'POST',
 
-            .then(result => {
+//             headers: myHeaders,
+
+//             body: raw,
+
+//             redirect: 'follow'
+
+//         };
+
+
+
+//         fetch("http://127.0.0.1:3000/terapia/add_therapy", requestOptions)
+
+//             .then(response => response.text())
+
+//             .then(result => {
                 
-                console.log(result)
-                window.location.reload();
-            })
+//                 console.log(result)
+                
+//             })
 
-            .catch(error => console.log('error', error));
+//             .catch(error => console.log('error', error));
         
-    })
+//     })
 
-    // const compro = ( newFecha , arrayFechas ) => {
+//     // const compro = ( newFecha , arrayFechas ) => {
 
-    // }
-}
+//     // }
+// }
 
