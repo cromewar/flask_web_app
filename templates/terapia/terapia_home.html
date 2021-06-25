@@ -132,8 +132,25 @@
 
 <div class="row">
     <div class="col-md-12">
-        <input type="text" id="livebox">
-        <p id="search-response"></p>
+        <h3>Por Categorías</h3>
+        <input type="text" id="livebox" class="col-md-12" placeholder="Buscar">
+        <br><br>
+        <table>
+            <thead>
+                <tr>
+                    <td>cliente</td>
+                    <td>terapeuta</td>
+                    <td>especialidad</td>
+                    <td>fecha</td>
+                    <td>duracion</td>
+                    <td>fin</td>
+                    <td>costo</td>
+                </tr>
+            </thead>
+            <tbody id="contenido_busqueda">
+                   
+            </tbody>
+        </table>
     </div>
     <script>
         $(document).ready(function(){
@@ -145,7 +162,24 @@
                     data:{text: textinlivebox},
                     success: function(res){
                         //document.getElementById('search-response').innerHTML = res;
-                        console.log(res)
+                        let respuesta = JSON.parse(res)
+                        document.getElementById('contenido_busqueda').innerHTML = ''
+                        //console.log(respuesta)
+                        respuesta.forEach((item) => {
+                            console.log(item)
+                            let contenido_actual = document.getElementById('contenido_busqueda')
+                            contenido_actual.innerHTML += `
+                            <tr>
+                                <td>${item.nombres}</td>
+                                <td>${item.nombre}</td>
+                                <td>${item.descripcion}</td>
+                                <td>${item.fecha}</td>
+                                <td>${item.duracion}</td>
+                                <td>${item.fin}</td>
+                                <td>${item.costo}</td>
+                            </tr>
+                            `
+                        })
                     }
                 })
             });
