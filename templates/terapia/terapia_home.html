@@ -187,6 +187,83 @@
     </script>
 </div>
 
+<div class="row">
+    <div class="col-md-12">
+        <h3>Por Fecha con dos especialidades</h3>
+        
+        <select name="especialidad" class="form-control" id="esp1">
+            {% for esp in especialidades%}
+            <option value="{{ esp.1}}">
+                {{ esp.1 }}
+            </option>
+            {% endfor %}
+        </select>
+        <select name="especialidad" class="form-control" id="esp2">
+            {% for esp in especialidades%}
+            <option value="{{ esp.1}}">
+                {{ esp.1 }}
+            </option>
+            {% endfor %}
+        </select>
+        <input type="date" id="livebox-date" class="col-md-5">
+        <button name="submitDataBtn" id="submitDataBtn" class="btn btn-primary">Buscar</button>
+        <br><br>
+        <table>
+            <thead>
+                <tr>
+                    <td>cliente</td>
+                    <td>terapeuta</td>
+                    <td>especialidad</td>
+                    <td>fecha</td>
+                    <td>duracion</td>
+                    <td>fin</td>
+                    <td>costo</td>
+                </tr>
+            </thead>
+            <tbody id="contenido_busqueda_2">
+                   
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $("#submitDataBtn").click(function(e){
+                let date1 = document.getElementById('livebox-date').value
+                let especialidad1 = document.getElementById('esp1').value
+                let especialidad2 = document.getElementById('esp2').value
+                
+                
+                $.ajax({
+                    method: "POST",
+                    url: "/terapia/livesearch2",
+                    data:{date: date1, especialidad1: especialidad1, especialidad2: especialidad2},
+                    success: function(res){
+                        //document.getElementById('search-response').innerHTML = res;
+                        let respuesta = JSON.parse(res)
+                        document.getElementById('contenido_busqueda_2').innerHTML = ''
+                        //console.log(respuesta)
+                        respuesta.forEach((item) => {
+                            console.log(item)
+                            let contenido_actual = document.getElementById('contenido_busqueda_2')
+                            contenido_actual.innerHTML += `
+                            <tr>
+                                <td>${item.nombres}</td>
+                                <td>${item.nombre}</td>
+                                <td>${item.descripcion}</td>
+                                <td>${item.fecha}</td>
+                                <td>${item.duracion}</td>
+                                <td>${item.fin}</td>
+                                <td>${item.costo}</td>
+                            </tr>
+                            `
+                        })
+                    }
+                })
+            });
+        });
+    </script>
+</div>
+
 <!-- <div class="row">
     <div id="calendar" class="col-md-12">
         <script>

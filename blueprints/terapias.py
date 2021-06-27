@@ -25,8 +25,10 @@ def home():
     cliente = cur.fetchall()
     cur.execute('SELECT * FROM terapeuta')
     terapeuta = cur.fetchall()
+    cur.execute('SELECT * FROM especialidad')
+    especialidades = cur.fetchall()
 
-    return render_template('terapia_home.html', terapia=data, terapeuta=terapeuta, cliente=cliente)
+    return render_template('terapia_home.html', terapia=data, terapeuta=terapeuta, cliente=cliente, especialidades = especialidades)
 
 
 @terapia.route('/factura/<id>')
@@ -42,6 +44,21 @@ def livesearch():
     searchbox = request.form.get('text')
     cur = mysql.connection.cursor()
     query = "SELECT terapia.*,terapeuta.nombre,cliente.nombres, especialidad.descripcion FROM terapia LEFT JOIN terapeuta ON terapeuta.id_terapueta = terapia.terapeuta_id_terapueta LEFT JOIN cliente ON cliente.id_cliente = terapia.cliente_id_cliente LEFT JOIN especialidad ON especialidad.id_especialidad = terapeuta.id_especialidad WHERE especialidad.descripcion LIKE '{}%'  OR terapeuta.nombre LIKE '{}%' OR cliente.nombres LIKE '{}%' ".format(searchbox, searchbox, searchbox)
+    cur.execute(query)
+    row_headers =[x[0] for x in cur.description]
+    rv = cur.fetchall()
+    json_data=[]
+    for result in rv:
+        json_data.append(dict(zip(row_headers, result)))
+    return json.dumps(json_data)
+
+@terapia.route('/livesearch2', methods=["POST","GET"])
+def livesearch2():
+    date = request.form.get('date')
+    esp1 = request.form.get('especialidad1')
+    esp2 = request.form.get('especialidad2')
+    cur = mysql.connection.cursor()
+    query = "SELECT terapia.*,terapeuta.nombre,cliente.nombres, especialidad.descripcion FROM terapia LEFT JOIN terapeuta ON terapeuta.id_terapueta = terapia.terapeuta_id_terapueta LEFT JOIN cliente ON cliente.id_cliente = terapia.cliente_id_cliente LEFT JOIN especialidad ON especialidad.id_especialidad = terapeuta.id_especialidad WHERE date(fecha) = '{}' and ( especialidad.descripcion = '{}' or especialidad.descripcion = '{}')".format(date, esp1, esp2)
     cur.execute(query)
     row_headers =[x[0] for x in cur.description]
     rv = cur.fetchall()
@@ -73,6 +90,8 @@ def add_therapy():
         cur.execute(
         'SELECT terapia.*,terapeuta.nombre,cliente.nombres FROM terapia LEFT JOIN terapeuta ON terapeuta.id_terapueta = terapia.terapeuta_id_terapueta LEFT JOIN cliente ON cliente.id_cliente = terapia.cliente_id_cliente')
         data = cur.fetchall()
+
+       
         
         print(check_conflict(data, fecha_ini, h1, cliente, terapeuta))
         if check_conflict(data, fecha_ini, h1, cliente, terapeuta):
